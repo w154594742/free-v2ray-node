@@ -3,25 +3,91 @@ import base64
 import yaml
 import json
 import socket
-import socks
 import time
 import re
+import os
+import shutil
+import tempfile
+import platform
+import subprocess
+import random
+import zipfile
+import io
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs, unquote
-from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 订阅链接列表
-links = [
-    "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
-    'https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2',
-    'https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt',
-    'https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt',
-]
+links = ["https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc0.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc1.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc2.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc3.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc4.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/xiaoji235/airport-free/refs/heads/main/clash/naidounode.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/refs/heads/main/data/{Y_m_d}/{x}.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/SSAggregator/master/sub/sub_merge_yaml.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/wangyingbo/yb_clashgithub_sub/main/clash_sub.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/ljlfct01/ljlfct01.github.io/refs/heads/main/节点",
+        "https://ghproxy.net/https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/leetomlee123/freenode/refs/heads/main/README.md",
+        "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/zhangkaiitugithub/passcro/main/speednodes.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/skka3134/test/refs/heads/main/clash.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mgit0001/test_clash/refs/heads/main/heima.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mai19950/clashgithub_com/refs/heads/main/site",
+        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/refs/heads/main/README.md",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub",
+        "https://ghproxy.net/https://raw.githubusercontent.com/shahidbhutta/Clash/refs/heads/main/Router",
+        "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.meta.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/anaer/Sub/refs/heads/main/clash.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/a2470982985/getNode/main/clash.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/c.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.yml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mfbpn/tg_mfbpn_sub/main/trial.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/clash.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/all_configs.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/ripaojiedian/freenode/main/clash",
+        "https://ghproxy.net/https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml",
+        "https://ghproxy.net/https://raw.githubusercontent.com/mfuu/v2ray/master/clash.yaml",
+        "https://api.mxlweb.xyz/sub?target=clash&url=https://www.xrayvip.com/free.yaml&insert=false",
+        "https://api.mxlweb.xyz/sub?target=clash&url=https://mxlsub.me/free&insert=false",
+        "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
+        "https://www.freeclashnode.com/uploads/{Y}/{m}/1-{Ymd}.yaml",
+        "https://clashgithub.com/wp-content/uploads/rss/{Ymd}.yml",
+        "https://sub.reajason.eu.org/clash.yaml",
+        "https://clash.221207.xyz/pubclashyaml",
+        "https://clash.llleman.com/clach.yml",
+        "https://proxypool.link/trojan/sub",
+        "https://proxypool.link/ss/sub|ss",
+        "https://proxypool.link/vmess/sub",
+        "https://mxlsub.me/newfull",
+        "https://igdux.top/5Hna",
+        "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+        "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
+        "https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify2.txt",
+        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify3.txt",
+    ]
+
+# links = [
+#     "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
+#     "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
+#     "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
+#     "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
+#     "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
+#     'https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2',
+#     'https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt',
+#     'https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt',
+#    ]
 
 # 支持的协议类型列表
 SUPPORTED_PROTOCOLS = [
@@ -37,6 +103,18 @@ SUPPORTED_PROTOCOLS = [
     'hysteria://',
     'wireguard://'
 ]
+
+# 测速相关配置
+# 测试URL列表
+TEST_URLS = [
+    "http://www.gstatic.com/generate_204",  # Google测试
+]
+CONNECTION_TIMEOUT = 10  # 连接超时时间，单位为秒
+MAX_CONCURRENT_TESTS = 200  # 最大并发测试数量
+DEBUG_MODE = False  # 是否输出详细日志
+
+# 核心程序配置
+CORE_PATH = None  # 核心程序路径，将自动检测
 
 def format_current_date(url):
     """替换URL中的日期占位符"""
@@ -173,6 +251,13 @@ def parse_v2ray_uri(uri):
             
         # 处理shadowsocks协议
         elif uri.startswith('ss://'):
+            # 首先获取#后面的名称部分（如果存在）
+            name = 'Unknown'
+            if '#' in uri:
+                name_part = uri.split('#', 1)[1]
+                name = unquote(name_part)
+                uri = uri.split('#', 1)[0]  # 移除名称部分以便后续处理
+            
             if '@' in uri:
                 # 处理 ss://method:password@host:port
                 parsed = urlparse(uri)
@@ -198,9 +283,10 @@ def parse_v2ray_uri(uri):
                 else:
                     method, password = 'aes-256-gcm', ''
                 
-                # 提取节点名称
+                # 如果查询参数中包含remarks，优先使用它
                 query = parse_qs(parsed.query)
-                name = query.get('remarks', ['Unknown'])[0]
+                if 'remarks' in query:
+                    name = query.get('remarks', ['Unknown'])[0]
                 
                 return {
                     'type': 'ss',
@@ -215,7 +301,6 @@ def parse_v2ray_uri(uri):
                 b64_config = uri.replace('ss://', '')
                 try:
                     # 确保base64正确填充
-                    b64_config = b64_config.split('#')[0]
                     b64_config = b64_config + '=' * (-len(b64_config) % 4)
                     
                     config_str = base64.b64decode(b64_config).decode()
@@ -225,11 +310,6 @@ def parse_v2ray_uri(uri):
                         method, password = method_pwd.split(':', 1)
                         server, port = server_port.rsplit(':', 1)
                         
-                        # 提取节点名称 (可能在#后面)
-                        name = 'Unknown'
-                        if '#' in uri:
-                            name = unquote(uri.split('#', 1)[1])
-                            
                         return {
                             'type': 'ss',
                             'name': name,
@@ -238,8 +318,8 @@ def parse_v2ray_uri(uri):
                             'cipher': method,
                             'password': password
                         }
-                except:
-                    print(f"Invalid ss URI format: {uri}")
+                except Exception as e:
+                    print(f"Invalid ss URI format: {uri}, error: {str(e)}")
                     return None
                 
         # 处理shadowsocksr协议
@@ -435,40 +515,549 @@ def extract_nodes(content):
     print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
     return nodes
 
+def download_xray_core():
+    """下载Xray核心程序到当前目录"""
+    print("正在自动下载Xray核心程序...")
+    
+    # 检测操作系统类型
+    is_windows = platform.system() == "Windows"
+    is_64bit = platform.architecture()[0] == '64bit'
+    
+    # 获取最新版本的Xray发布信息
+    try:
+        api_url = "https://api.github.com/repos/XTLS/Xray-core/releases/latest"
+        response = requests.get(api_url, timeout=30)
+        release_info = response.json()
+        
+        # 确定下载文件名
+        if is_windows:
+            if is_64bit:
+                file_keyword = "windows-64"
+            else:
+                file_keyword = "windows-32"
+        else:  # Linux
+            if is_64bit:
+                file_keyword = "linux-64"
+            else:
+                file_keyword = "linux-32"
+        
+        # 查找匹配的下载URL
+        download_url = None
+        for asset in release_info['assets']:
+            if file_keyword in asset['name'].lower() and asset['name'].endswith('.zip'):
+                download_url = asset['browser_download_url']
+                break
+        
+        if not download_url:
+            print(f"未找到适合当前平台({file_keyword})的Xray下载链接")
+            return False
+        
+        # 下载Xray
+        print(f"下载Xray: https://ghproxy.net/{download_url}")
+        download_response = requests.get(f"https://ghproxy.net/{download_url}", timeout=120)
+        download_response.raise_for_status()
+        
+        # 创建目录结构
+        xray_dir = "./xray-core"
+        platform_dir = os.path.join(xray_dir, "windows-64" if is_windows else "linux-64")
+        os.makedirs(platform_dir, exist_ok=True)
+        
+        # 解压缩文件
+        with zipfile.ZipFile(io.BytesIO(download_response.content)) as z:
+            z.extractall(platform_dir)
+        
+        # 设置执行权限（Linux）
+        if not is_windows:
+            xray_path = os.path.join(platform_dir, "xray")
+            if os.path.exists(xray_path):
+                os.chmod(xray_path, 0o755)
+        
+        print(f"Xray核心程序已下载并解压到 {platform_dir}")
+        return True
+    
+    except Exception as e:
+        print(f"下载Xray失败: {str(e)}")
+        return False
+
+def find_core_program():
+    """查找V2Ray/Xray核心程序，如果没有找到则自动下载Xray"""
+    global CORE_PATH
+    
+    # 检测操作系统类型
+    is_windows = platform.system() == "Windows"
+    
+    # V2Ray可执行文件名
+    v2ray_exe = "v2ray.exe" if is_windows else "v2ray"
+    xray_exe = "xray.exe" if is_windows else "xray"
+    
+    # 首先检查xray-core目录
+    xray_core_dir = "./xray-core"
+    platform_dir = "windows-64" if is_windows else "linux-64"
+    xray_platform_path = os.path.join(xray_core_dir, platform_dir, xray_exe)
+    
+    # 检查Xray是否存在
+    if os.path.isfile(xray_platform_path) and os.access(xray_platform_path, os.X_OK if not is_windows else os.F_OK):
+        CORE_PATH = xray_platform_path
+        print(f"找到Xray核心程序: {CORE_PATH}")
+        return CORE_PATH
+    
+    # 然后检查v2ray-core目录
+    v2ray_core_dir = "./v2ray-core"
+    v2ray_platform_path = os.path.join(v2ray_core_dir, platform_dir, v2ray_exe)
+    
+    # 检查V2Ray是否存在
+    if os.path.isfile(v2ray_platform_path) and os.access(v2ray_platform_path, os.X_OK if not is_windows else os.F_OK):
+        CORE_PATH = v2ray_platform_path
+        print(f"找到V2Ray核心程序: {CORE_PATH}")
+        return CORE_PATH
+    
+    # 搜索路径
+    search_paths = [
+        ".",  # 当前目录
+        "./v2ray",  # v2ray子目录
+        "./xray",   # xray子目录
+        os.path.expanduser("~"),  # 用户主目录
+    ]
+    
+    # Windows特定搜索路径
+    if is_windows:
+        search_paths.extend([
+            "C:\\Program Files\\v2ray",
+            "C:\\Program Files (x86)\\v2ray",
+            "C:\\v2ray",
+        ])
+    # Linux特定搜索路径
+    else:
+        search_paths.extend([
+            "/usr/bin",
+            "/usr/local/bin",
+            "/opt/v2ray",
+            "/opt/xray",
+        ])
+    
+    # 搜索V2Ray或XRay可执行文件
+    for path in search_paths:
+        v2ray_path = os.path.join(path, v2ray_exe)
+        xray_path = os.path.join(path, xray_exe)
+        
+        if os.path.isfile(v2ray_path) and os.access(v2ray_path, os.X_OK if not is_windows else os.F_OK):
+            CORE_PATH = v2ray_path
+            print(f"找到V2Ray核心程序: {CORE_PATH}")
+            return CORE_PATH
+            
+        if os.path.isfile(xray_path) and os.access(xray_path, os.X_OK if not is_windows else os.F_OK):
+            CORE_PATH = xray_path
+            print(f"找到XRay核心程序: {CORE_PATH}")
+            return CORE_PATH
+    
+    # 如果未找到核心程序，自动下载Xray
+    print("未找到V2Ray或Xray核心程序，准备自动下载...")
+    if download_xray_core():
+        # 重新检查Xray是否已下载
+        if os.path.isfile(xray_platform_path) and os.access(xray_platform_path, os.X_OK if not is_windows else os.F_OK):
+            CORE_PATH = xray_platform_path
+            print(f"已成功下载并使用Xray核心程序: {CORE_PATH}")
+            return CORE_PATH
+    
+    # 如果仍未找到，提示用户手动下载
+    print("自动下载失败。请访问 https://github.com/XTLS/Xray-core/releases 手动下载并安装")
+    print("将Xray核心程序放在当前目录或指定系统路径中")
+    return None
+
+def find_available_port(start_port=10000, end_port=60000):
+    """查找可用的端口"""
+    while True:
+        port = random.randint(start_port, end_port)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.bind(('127.0.0.1', port))
+            sock.close()
+            return port
+        except:
+            sock.close()
+            continue
+
+def generate_v2ray_config(node, local_port):
+    """根据节点信息生成V2Ray配置文件，采用与V2RayN相同的配置方式"""
+    config = {
+        "inbounds": [
+            {
+                "port": local_port,
+                "listen": "127.0.0.1",
+                "protocol": "socks",  # 改为socks协议，与V2RayN保持一致
+                "settings": {
+                    "auth": "noauth",  # 不需要认证
+                    "udp": True  # 支持UDP
+                },
+                "sniffing": {
+                    "enabled": True,
+                    "destOverride": ["http", "tls"]
+                }
+            }
+        ],
+        "outbounds": [
+            # 出站连接将根据节点类型生成
+        ],
+        "log": {
+            "loglevel": "none"  # 禁止日志输出，减少干扰
+        }
+    }
+    
+    # 根据节点类型配置出站连接，参考V2RayN的配置方式
+    if node['type'] == 'vmess':
+        # 基本VMess配置
+        outbound = {
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": node['server'],
+                        "port": node['port'],
+                        "users": [
+                            {
+                                "id": node['uuid'],
+                                "alterId": node.get('alterId', 0),
+                                "security": node.get('cipher', 'auto')
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": node.get('network', 'tcp'),
+                "security": "tls" if node.get('tls', False) else "none"
+            }
+        }
+        
+        # 添加网络特定配置，参考V2RayN的配置
+        if node.get('network') == 'ws':
+            outbound["streamSettings"]["wsSettings"] = {
+                "path": node.get('path', '/'),
+                "headers": {
+                    "Host": node.get('host', node['server'])
+                }
+            }
+        elif node.get('network') == 'h2':
+            outbound["streamSettings"]["httpSettings"] = {
+                "path": node.get('path', '/'),
+                "host": [node.get('host', node['server'])]
+            }
+        elif node.get('network') == 'quic':
+            outbound["streamSettings"]["quicSettings"] = {
+                "security": node.get('quicSecurity', 'none'),
+                "key": node.get('quicKey', ''),
+                "header": {
+                    "type": node.get('headerType', 'none')
+                }
+            }
+        elif node.get('network') == 'grpc':
+            outbound["streamSettings"]["grpcSettings"] = {
+                "serviceName": node.get('path', ''),
+                "multiMode": node.get('multiMode', False)
+            }
+        elif node.get('network') == 'tcp':
+            if node.get('headerType') == 'http':
+                outbound["streamSettings"]["tcpSettings"] = {
+                    "header": {
+                        "type": "http",
+                        "request": {
+                            "path": [node.get('path', '/')],
+                            "headers": {
+                                "Host": [node.get('host', '')]
+                            }
+                        }
+                    }
+                }
+                
+        # TLS相关设置
+        if node.get('tls'):
+            outbound["streamSettings"]["tlsSettings"] = {
+                "serverName": node.get('sni', node.get('host', node['server'])),
+                "allowInsecure": node.get('allowInsecure', False)
+            }
+        
+        config["outbounds"] = [outbound]
+    elif node['type'] == 'trojan':
+        # 增强Trojan配置
+        config["outbounds"] = [{
+            "protocol": "trojan",
+            "settings": {
+                "servers": [
+                    {
+                        "address": node['server'],
+                        "port": node['port'],
+                        "password": node['password']
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": node.get('network', 'tcp'),
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": node.get('sni', node.get('host', node['server'])),
+                    "allowInsecure": node.get('allowInsecure', False)
+                }
+            }
+        }]
+        
+        # 添加网络特定配置
+        if node.get('network') == 'ws':
+            config["outbounds"][0]["streamSettings"]["wsSettings"] = {
+                "path": node.get('path', '/'),
+                "headers": {
+                    "Host": node.get('host', node['server'])
+                }
+            }
+    elif node['type'] == 'vless':
+        # 增强VLESS配置
+        config["outbounds"] = [{
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": node['server'],
+                        "port": node['port'],
+                        "users": [
+                            {
+                                "id": node['uuid'],
+                                "encryption": "none",
+                                "flow": node.get('flow', '')
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": node.get('network', 'tcp'),
+                "security": "tls" if node.get('tls', False) else "none"
+            }
+        }]
+        
+        # 添加网络特定配置
+        if node.get('network') == 'ws':
+            config["outbounds"][0]["streamSettings"]["wsSettings"] = {
+                "path": node.get('path', '/'),
+                "headers": {
+                    "Host": node.get('host', node['server'])
+                }
+            }
+        elif node.get('network') == 'grpc':
+            config["outbounds"][0]["streamSettings"]["grpcSettings"] = {
+                "serviceName": node.get('path', ''),
+                "multiMode": node.get('multiMode', False)
+            }
+            
+        # TLS相关设置
+        if node.get('tls'):
+            config["outbounds"][0]["streamSettings"]["tlsSettings"] = {
+                "serverName": node.get('sni', node.get('host', node['server'])),
+                "allowInsecure": node.get('allowInsecure', False)
+            }
+    elif node['type'] == 'ss':
+        # Shadowsocks配置
+        config["outbounds"] = [{
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [
+                    {
+                        "address": node['server'],
+                        "port": node['port'],
+                        "method": node['cipher'],
+                        "password": node['password']
+                    }
+                ]
+            }
+        }]
+    elif node['type'] == 'socks':
+        # SOCKS配置
+        outbound = {
+            "protocol": "socks",
+            "settings": {
+                "servers": [
+                    {
+                        "address": node['server'],
+                        "port": node['port']
+                    }
+                ]
+            }
+        }
+        
+        # 如果有用户名和密码，添加到配置中
+        if node.get('username') and node.get('password'):
+            outbound["settings"]["servers"][0]["users"] = [
+                {
+                    "user": node['username'],
+                    "pass": node['password']
+                }
+            ]
+            
+        config["outbounds"] = [outbound]
+    elif node['type'] in ['http', 'https']:
+        # HTTP/HTTPS配置
+        outbound = {
+            "protocol": "http",
+            "settings": {
+                "servers": [
+                    {
+                        "address": node['server'],
+                        "port": node['port']
+                    }
+                ]
+            }
+        }
+        
+        # 如果有用户名和密码，添加到配置中
+        if node.get('username') and node.get('password'):
+            outbound["settings"]["servers"][0]["users"] = [
+                {
+                    "user": node['username'],
+                    "pass": node['password']
+                }
+            ]
+            
+        config["outbounds"] = [outbound]
+    else:
+        # 对于不完全支持的协议，使用简单配置
+        print(f"警告: 节点类型 {node['type']} 可能不被完全支持，使用基本配置")
+        return None
+
+    return config
+
+def test_node_latency(node):
+    """使用核心程序测试节点延迟"""
+    if not CORE_PATH:
+        if DEBUG_MODE:
+            print("未找到核心程序，无法进行延迟测试")
+        return -1
+    
+    # 为测试创建临时目录
+    temp_dir = tempfile.mkdtemp(prefix="node_test_")
+    config_file = os.path.join(temp_dir, "config.json")
+    
+    # 获取一个可用端口
+    local_port = find_available_port()
+    
+    # 生成配置文件
+    config = generate_v2ray_config(node, local_port)
+    if not config:
+        shutil.rmtree(temp_dir)
+        return -1
+    
+    with open(config_file, 'w') as f:
+        json.dump(config, f)
+    
+    # 启动核心进程
+    core_process = None
+    try:
+        # 设置代理环境变量，使用SOCKS代理
+        proxies = {
+            'http': f'socks5://127.0.0.1:{local_port}',
+            'https': f'socks5://127.0.0.1:{local_port}'
+        }
+        
+        # 设置与V2RayN相同的请求头
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2'
+        }
+        
+        # 在Windows上，使用CREATE_NO_WINDOW标志隐藏控制台窗口
+        startupinfo = None
+        if platform.system() == "Windows":
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+        
+        # 启动核心程序
+        core_process = subprocess.Popen(
+            [CORE_PATH, "-c", config_file],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            startupinfo=startupinfo
+        )
+        
+        # 等待核心程序启动
+        time.sleep(3)
+        
+        # 测试连接延迟 - 不再使用重试机制
+        start_time = time.time()
+        
+        # 按顺序尝试不同的测试URL
+        for test_url in TEST_URLS:
+            try:
+                if DEBUG_MODE:
+                    print(f"测试节点: {node['name']} - 尝试URL: {test_url}")
+                
+                response = requests.get(
+                    test_url,
+                    proxies=proxies,
+                    headers=headers,
+                    timeout=CONNECTION_TIMEOUT
+                )
+                
+                if response.status_code in [200, 204]:
+                    latency = int((time.time() - start_time) * 1000)
+                    if DEBUG_MODE:
+                        print(f"测试成功: {node['name']} - URL: {test_url} - 延迟: {latency}ms")
+                    return latency
+                else:
+                    if DEBUG_MODE:
+                        print(f"测试URL状态码错误: {response.status_code}")
+            except Exception as e:
+                if DEBUG_MODE:
+                    print(f"测试失败: {test_url} - 错误: {str(e)}")
+                continue  # 尝试下一个URL
+        
+        # 所有URL测试都失败
+        if DEBUG_MODE:
+            print(f"节点 {node['name']} 所有测试URL都失败")
+        return -1
+    
+    except Exception as e:
+        if DEBUG_MODE:
+            print(f"测试节点 {node['name']} 时发生错误: {str(e)}")
+        return -1
+    
+    finally:
+        # 清理资源
+        if core_process:
+            core_process.terminate()
+            try:
+                core_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                core_process.kill()
+        
+        # 删除临时目录
+        try:
+            shutil.rmtree(temp_dir)
+        except:
+            pass
+
 def test_latency(node):
     """测试节点延迟"""
-    try:
-        start_time = time.time()
-        sock = socks.socksocket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(5)
-        
-        # 改进延迟测试，支持所有类型的节点
-        success = False
-        try:
-            sock.connect((node['server'], node['port']))
-            success = True
-        except Exception as e:
-            return -1
-            
-        if not success:
-            return -1
-            
-        latency = int((time.time() - start_time) * 1000)
-        sock.close()
-        return latency
-    except Exception as e:
-        print(f"测试节点 {node['name']} 延迟时出错: {str(e)}")
+    # 必须有核心程序才能进行测试
+    if not CORE_PATH:
+        print(f"未找到核心程序，无法测试节点: {node['name']}")
         return -1
+    
+    # 使用核心程序进行精确测试
+    latency = test_node_latency(node)
+    
+    return latency
 
 def process_node(node):
     """处理单个节点，添加延迟信息"""
     if not node or 'name' not in node or 'server' not in node:
         return None
 
+    print(f"测试节点: {node['name']} [{node['type']}] - {node['server']}:{node['port']}")
     latency = test_latency(node)
     
     # 过滤掉延迟为0ms或连接失败的节点
     if latency <= 0:
+        status = "连接失败" if latency == -1 else "延迟为0ms"
+        print(f"节点: {node['name']} ，{status}，跳过")
         return None
     
     # 更新节点名称，添加延迟信息
@@ -555,6 +1144,11 @@ def node_to_v2ray_uri(node):
     return None
 
 def main():
+    global CORE_PATH
+    
+    # 查找核心程序
+    CORE_PATH = find_core_program()
+    
     all_nodes = []
     
     # 获取并解析所有订阅
@@ -565,16 +1159,22 @@ def main():
         if not content:
             print("获取失败，跳过该链接")
             continue
-        
+            
         # 使用新的级联提取函数
         nodes = extract_nodes(content)
         print(f"成功提取 {len(nodes)} 个节点")
         all_nodes.extend(nodes)
     
+    # 节点去重
+    print(f"去重前节点数量: {len(all_nodes)}")
+    all_nodes = remove_duplicates(all_nodes)
+    print(f"去重后节点数量: {len(all_nodes)}")
+    
     # 使用线程池并发测试节点延迟
-    print(f"\n开始测试节点延迟，共 {len(all_nodes)} 个节点...")
+    print(f"\n开始测试节点延迟...")
     valid_nodes = []
-    with ThreadPoolExecutor(max_workers=100) as executor:
+    # 限制并发数量，避免资源耗尽
+    with ThreadPoolExecutor(max_workers=MAX_CONCURRENT_TESTS) as executor:
         future_to_node = {executor.submit(process_node, node): node for node in all_nodes}
         for future in as_completed(future_to_node):
             processed_node = future.result()
@@ -583,20 +1183,32 @@ def main():
     
     print(f"\n测试完成，有效节点数量: {len(valid_nodes)}")
     
-    # 节点去重
-    unique_nodes = remove_duplicates(valid_nodes)
-    print(f"\n去重后剩余 {len(unique_nodes)} 个节点")
-    
-    # 转换为V2Ray URI格式并保存
+    # 收集所有有效节点的URI
+    valid_uris = []
     valid_uri_count = 0
-    with open('v2ray.txt', 'w', encoding='utf-8') as f:
-        for node in unique_nodes:
-            uri = node_to_v2ray_uri(node)
-            if uri:
-                f.write(f"{uri}\n")
-                valid_uri_count += 1
+    for node in valid_nodes:
+        uri = node_to_v2ray_uri(node)
+        if uri:
+            valid_uris.append(uri)
+            valid_uri_count += 1
     
-    print(f"\n已将 {valid_uri_count} 个有效节点保存到 v2ray.txt 文件")
+    # 将所有URI合并为一个字符串，并进行base64编码
+    if valid_uri_count > 0:
+        uri_content = '\n'.join(valid_uris)
+        base64_content = base64.b64encode(uri_content.encode('utf-8')).decode('utf-8')
+        
+        # 将base64编码后的内容写入文件
+        with open('v2ray.txt', 'w', encoding='utf-8') as f:
+            f.write(base64_content)
+        
+        print(f"\n已将 {valid_uri_count} 个有效节点以base64编码保存到 v2ray.txt 文件")
+        
+        # 同时保存一个原始文本版本，方便查看
+        with open('v2ray_raw.txt', 'w', encoding='utf-8') as f:
+            f.write(uri_content)
+        print(f"同时保存了原始文本版本到 v2ray_raw.txt 文件")
+    else:
+        print("\n未找到有效节点，不生成文件")
 
 if __name__ == '__main__':
     main()
