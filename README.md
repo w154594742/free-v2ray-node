@@ -27,12 +27,7 @@
 ## 安装依赖
 
 ```bash
-pip install requests pyyaml
-```
-
-如果需要HTML解析功能（用于特定网站）：
-```bash
-pip install beautifulsoup4
+pip install -r requirements.txt
 ```
 
 ## 使用方法
@@ -81,7 +76,7 @@ links = [
 
 ### 自动下载核心程序
 
-如果系统中未找到V2Ray或XRay核心程序，工具会自动从GitHub下载最新版本。
+如果系统中未找到XRay核心程序，工具会自动从GitHub下载最新版本。
 
 ### 多种格式解析
 
@@ -99,7 +94,7 @@ links = [
 
 ### 测试方法
 
-使用V2Ray/XRay核心程序建立真实连接，通过访问Google测试端点（`http://www.gstatic.com/generate_204`）来测量延迟。
+使用XRay核心程序建立真实连接，通过访问Google测试端点（`http://www.gstatic.com/generate_204`）来测量延迟。
 
 ## 注意事项
 
@@ -111,7 +106,7 @@ links = [
 ## 故障排除
 
 - 如果无法获取节点信息，请检查订阅链接是否有效。
-- 如果测试节点时出现错误，请确保V2Ray/XRay核心程序正确安装。
+- 如果测试节点时出现错误，请确保XRay核心程序正确安装。
 - 对于特殊网站的解析问题，可能需要安装额外的依赖（如BeautifulSoup4）。
 - 如果遇到编码问题，可能需要调整`fetch_content`函数中的编码处理逻辑。
 
