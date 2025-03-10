@@ -109,7 +109,7 @@ TEST_URLS = [
     "http://www.gstatic.com/generate_204",  # Google测试
 ]
 CONNECTION_TIMEOUT = 10  # 连接超时时间，单位为秒
-MAX_CONCURRENT_TESTS = 50  # 最大并发测试数量
+MAX_CONCURRENT_TESTS = 1000  # 最大并发测试数量
 DEBUG_MODE = False  # 默认开启调试模式，方便查看处理过程
 
 # 核心程序配置
