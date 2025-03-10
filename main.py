@@ -18,65 +18,64 @@ from urllib.parse import urlparse, parse_qs, unquote
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 订阅链接列表
-links = ["https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc0.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc1.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc2.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc3.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc4.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/xiaoji235/airport-free/refs/heads/main/clash/naidounode.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/refs/heads/main/data/{Y_m_d}/{x}.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/SSAggregator/master/sub/sub_merge_yaml.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/wangyingbo/yb_clashgithub_sub/main/clash_sub.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/ljlfct01/ljlfct01.github.io/refs/heads/main/节点",
-        "https://ghproxy.net/https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/leetomlee123/freenode/refs/heads/main/README.md",
-        "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/zhangkaiitugithub/passcro/main/speednodes.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/skka3134/test/refs/heads/main/clash.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mgit0001/test_clash/refs/heads/main/heima.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mai19950/clashgithub_com/refs/heads/main/site",
-        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/refs/heads/main/README.md",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub",
-        "https://ghproxy.net/https://raw.githubusercontent.com/shahidbhutta/Clash/refs/heads/main/Router",
-        "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.meta.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/anaer/Sub/refs/heads/main/clash.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/a2470982985/getNode/main/clash.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/c.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.yml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mfbpn/tg_mfbpn_sub/main/trial.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/clash.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/all_configs.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/ripaojiedian/freenode/main/clash",
-        "https://ghproxy.net/https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml",
-        "https://ghproxy.net/https://raw.githubusercontent.com/mfuu/v2ray/master/clash.yaml",
-        "https://api.mxlweb.xyz/sub?target=clash&url=https://www.xrayvip.com/free.yaml&insert=false",
-        "https://api.mxlweb.xyz/sub?target=clash&url=https://mxlsub.me/free&insert=false",
-        "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
-        "https://www.freeclashnode.com/uploads/{Y}/{m}/1-{Ymd}.yaml",
-        "https://clashgithub.com/wp-content/uploads/rss/{Ymd}.yml",
-        "https://sub.reajason.eu.org/clash.yaml",
-        "https://clash.221207.xyz/pubclashyaml",
-        "https://clash.llleman.com/clach.yml",
-        "https://proxypool.link/trojan/sub",
-        "https://proxypool.link/ss/sub|ss",
-        "https://proxypool.link/vmess/sub",
-        "https://mxlsub.me/newfull",
-        "https://igdux.top/5Hna",
-        "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
-        "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
-        "https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify2.txt",
-        "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify3.txt",
-    ]
+links = [
+    "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/main/data/{Y_m_d}/{x}.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc0.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc1.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc2.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc3.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc4.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/xiaoji235/airport-free/refs/heads/main/clash/naidounode.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/SSAggregator/master/sub/sub_merge_yaml.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/ljlfct01/ljlfct01.github.io/refs/heads/main/节点",
+    "https://ghproxy.net/https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/leetomlee123/freenode/refs/heads/main/README.md",
+    "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/zhangkaiitugithub/passcro/main/speednodes.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mgit0001/test_clash/refs/heads/main/heima.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mai19950/clashgithub_com/refs/heads/main/site",
+    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/refs/heads/main/README.md",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub",
+    "https://ghproxy.net/https://raw.githubusercontent.com/shahidbhutta/Clash/refs/heads/main/Router",
+    "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.meta.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/anaer/Sub/refs/heads/main/clash.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/a2470982985/getNode/main/clash.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/c.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.yml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mfbpn/tg_mfbpn_sub/main/trial.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/clash.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/all_configs.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/ripaojiedian/freenode/main/clash",
+    "https://ghproxy.net/https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml",
+    "https://ghproxy.net/https://raw.githubusercontent.com/mfuu/v2ray/master/clash.yaml",
+    "https://api.mxlweb.xyz/sub?target=clash&url=https://www.xrayvip.com/free.yaml&insert=false",
+    "https://api.mxlweb.xyz/sub?target=clash&url=https://mxlsub.me/free&insert=false",
+    "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
+    "https://www.freeclashnode.com/uploads/{Y}/{m}/1-{Ymd}.yaml",
+    "https://www.freeclashnode.com/uploads/{Y}/{m}/2-{Ymd}.yaml",
+    "https://www.freeclashnode.com/uploads/{Y}/{m}/3-{Ymd}.yaml",
+    "https://www.freeclashnode.com/uploads/{Y}/{m}/4-{Ymd}.yaml",
+    "https://sub.reajason.eu.org/clash.yaml",
+    "https://proxypool.link/trojan/sub",
+    "https://proxypool.link/ss/sub",
+    "https://proxypool.link/vmess/sub",
+    "https://mxlsub.me/newfull",
+    "https://igdux.top/5Hna",
+    "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+    "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
+    "https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify2.txt",
+    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify3.txt",
+]
 
 # links = [
 #     "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
@@ -110,57 +109,368 @@ TEST_URLS = [
     "http://www.gstatic.com/generate_204",  # Google测试
 ]
 CONNECTION_TIMEOUT = 10  # 连接超时时间，单位为秒
-MAX_CONCURRENT_TESTS = 200  # 最大并发测试数量
-DEBUG_MODE = False  # 是否输出详细日志
+MAX_CONCURRENT_TESTS = 50  # 最大并发测试数量
+DEBUG_MODE = False  # 默认开启调试模式，方便查看处理过程
 
 # 核心程序配置
 CORE_PATH = None  # 核心程序路径，将自动检测
 
+def is_github_raw_url(url):
+    """判断是否为GitHub的raw URL"""
+    return 'raw.githubusercontent.com' in url
+
+def extract_file_pattern(url):
+    """从URL中提取文件模式，例如{x}.yaml中的.yaml"""
+    match = re.search(r'\{x\}(\.[a-zA-Z0-9]+)(?:/|$)', url)
+    if match:
+        return match.group(1)  # 返回文件后缀，如 '.yaml', '.txt', '.json'
+    return None
+
+def get_github_filename(github_url, file_suffix):
+    """从GitHub API获取匹配指定后缀的文件名"""
+    try:
+        print(f"处理GitHub URL: {github_url}")
+        # 标准化URL - 移除代理前缀
+        url_without_proxy = github_url
+        if 'ghproxy.net/' in github_url:
+            url_without_proxy = github_url.split('ghproxy.net/', 1)[1]
+        
+        # 提取仓库所有者、名称和分支信息
+        url_parts = url_without_proxy.replace('https://raw.githubusercontent.com/', '').split('/')
+        if len(url_parts) < 3:
+            print(f"URL格式不正确: {github_url}")
+            return None
+        
+        owner = url_parts[0]
+        repo = url_parts[1]
+        branch = url_parts[2]
+        
+        # 处理分支信息
+        original_branch = branch
+        if 'refs/heads/' in branch:
+            branch = branch.split('refs/heads/')[1]
+        
+        # 提取文件路径 - 忽略仓库信息和{x}部分
+        # 例如：owner/repo/branch/path/to/directory/{x}.yaml -> path/to/directory
+        path_parts = '/'.join(url_parts[3:])  # 获取路径部分
+        if '{x}' in path_parts:
+            directory_path = path_parts.split('/{x}')[0]
+        else:
+            directory_path = path_parts
+        
+        print(f"解析结果: 仓库={owner}/{repo}, 分支={branch}, 路径={directory_path}")
+        
+        # 构建GitHub API URL
+        api_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{directory_path}"
+        
+        # 添加ref参数指定分支
+        if branch:
+            api_url += f"?ref={branch}"
+            
+        print(f"构建的API URL: {api_url}")
+        
+        # 使用代理访问GitHub API
+        proxy_api_url = f"https://ghproxy.net/{api_url}"
+        print(f"尝试通过代理访问: {proxy_api_url}")
+        
+        try:
+            response = requests.get(proxy_api_url, timeout=30)
+            if response.status_code != 200:
+                print("代理访问失败，尝试直接访问GitHub API")
+                response = requests.get(api_url, timeout=30)
+        except Exception as e:
+            print(f"代理访问失败: {str(e)}，尝试直接访问")
+            response = requests.get(api_url, timeout=30)
+            
+        if response.status_code != 200:
+            print(f"GitHub API请求失败: {response.status_code} - {api_url}")
+            print(f"响应内容: {response.text[:200]}...")
+            return None
+        
+        # 解析返回的JSON
+        files = response.json()
+        if not isinstance(files, list):
+            print(f"GitHub API返回的不是文件列表: {type(files)}")
+            print(f"响应内容: {str(files)[:200]}...")
+            return None
+        
+        print(f"在目录中找到{len(files)}个文件/目录")
+        
+        # 查找匹配后缀的文件
+        matching_files = [f['name'] for f in files if f['name'].endswith(file_suffix)]
+        
+        if not matching_files:
+            print(f"未找到匹配{file_suffix}后缀的文件，目录包含: {[f['name'] for f in files][:10]}")
+            return None
+        
+        # 排序并选择第一个匹配的文件（通常选择最近的文件）
+        matching_files.sort(reverse=True)
+        selected_file = matching_files[0]
+        print(f"选择文件: {selected_file}")
+        return selected_file
+        
+    except Exception as e:
+        print(f"获取GitHub文件列表出错: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def format_current_date(url):
-    """替换URL中的日期占位符"""
+    """替换URL中的日期占位符和{x}占位符"""
+    # 定义和生成所有可能的日期格式变量
     now = datetime.now()
-    return url.format(
-        Y=now.strftime('%Y'),
-        m=now.strftime('%m'),
-        d=now.strftime('%d'),
-        Ymd=now.strftime('%Y%m%d')
-    )
+    date_vars = {
+        # 基本日期组件
+        'Y': now.strftime('%Y'),          # 年份，如2023
+        'm': now.strftime('%m'),          # 月份，如05
+        'd': now.strftime('%d'),          # 日期，如09
+        
+        # 组合日期格式
+        'Ymd': now.strftime('%Y%m%d'),    # 组合格式，如20230509
+        'Y-m-d': now.strftime('%Y-%m-%d'), # 带连字符格式，如2023-05-09
+        'Y_m_d': now.strftime('%Y_%m_%d'), # 带下划线格式，如2023_05_09
+        
+        # 额外日期格式
+        'Y-m': now.strftime('%Y-%m'),     # 年月，如2023-05
+        'Y_m': now.strftime('%Y_%m'),     # 带下划线的年月，如2023_05
+        'md': now.strftime('%m%d'),       # 月日，如0509
+        'm-d': now.strftime('%m-%d'),     # 带连字符的月日，如05-09
+        'm_d': now.strftime('%m_%d'),     # 带下划线的月日，如05_09
+    }
+    
+    # 处理日期占位符
+    try:
+        formatted_url = url.format(**date_vars)
+    except KeyError as e:
+        print(f"URL中包含未支持的日期格式占位符: {e}")
+        print(f"支持的日期占位符有: {', '.join(date_vars.keys())}")
+        return url  # 返回原始URL，让后续处理决定是否跳过
+    
+    # 处理{x}占位符
+    if '{x}' in formatted_url:
+        # 提取后缀
+        file_suffix = extract_file_pattern(formatted_url)
+        if file_suffix and is_github_raw_url(formatted_url):
+            # 获取GitHub中匹配的文件名
+            filename = get_github_filename(formatted_url, file_suffix)
+            if filename:
+                # 替换{x}占位符为实际文件名
+                pattern = r'\{x\}' + re.escape(file_suffix)
+                formatted_url = re.sub(pattern, filename, formatted_url)
+            else:
+                print(f"警告: 未能解析{x}占位符, URL: {formatted_url}")
+    
+    return formatted_url
 
 def fetch_content(url):
     """获取订阅内容"""
     try:
-        url = format_current_date(url)
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive'
+        # 1. 首先替换日期相关的占位符
+        now = datetime.now()
+        date_vars = {
+            # 基本日期组件
+            'Y': now.strftime('%Y'),          # 年份，如2023
+            'm': now.strftime('%m'),          # 月份，如05
+            'd': now.strftime('%d'),          # 日期，如09
+            
+            # 组合日期格式
+            'Ymd': now.strftime('%Y%m%d'),    # 组合格式，如20230509
+            'Y-m-d': now.strftime('%Y-%m-%d'), # 带连字符格式，如2023-05-09
+            'Y_m_d': now.strftime('%Y_%m_%d'), # 带下划线格式，如2023_05_09
+            
+            # 额外日期格式
+            'Y-m': now.strftime('%Y-%m'),     # 年月，如2023-05
+            'Y_m': now.strftime('%Y_%m'),     # 带下划线的年月，如2023_05
+            'md': now.strftime('%m%d'),       # 月日，如0509
+            'm-d': now.strftime('%m-%d'),     # 带连字符的月日，如05-09
+            'm_d': now.strftime('%m_%d'),     # 带下划线的月日，如05_09
         }
-        response = requests.get(url, headers=headers, timeout=30, stream=True)
+        
+        # 先将{x}占位符临时替换，以免被format误处理
+        temp_marker = "___X_PLACEHOLDER___"
+        temporary_url = url.replace("{x}", temp_marker)
+        
+        # 尝试使用format方法替换所有日期占位符
+        try:
+            formatted_url = temporary_url.format(**date_vars)
+        except KeyError as e:
+            # 如果format失败，尝试手动替换
+            print(f"URL中包含未支持的日期格式占位符: {e}")
+            print(f"支持的日期占位符有: {', '.join(date_vars.keys())}")
+            formatted_url = temporary_url
+            # 手动替换常见的日期占位符
+            for pattern, replacement in [
+                ('{Y_m_d}', now.strftime('%Y_%m_%d')),
+                ('{Y-m-d}', now.strftime('%Y-%m-%d')),
+                ('{Ymd}', now.strftime('%Y%m%d')),
+                ('{Y}', now.strftime('%Y')),
+                ('{m}', now.strftime('%m')),
+                ('{d}', now.strftime('%d')),
+            ]:
+                if pattern in formatted_url:
+                    formatted_url = formatted_url.replace(pattern, replacement)
+                    print(f"手动替换日期占位符 {pattern} 为 {replacement}")
+        
+        # 将临时标记替换回{x}
+        formatted_url = formatted_url.replace(temp_marker, "{x}")
+        
+        # 2. 然后处理{x}占位符 - 现在日期占位符已经被替换
+        if '{x}' in formatted_url:
+            file_suffix = extract_file_pattern(formatted_url)
+            if file_suffix and is_github_raw_url(formatted_url):
+                print(f"在URL中找到{{x}}占位符，尝试获取匹配的文件...")
+                filename = get_github_filename(formatted_url, file_suffix)
+                if filename:
+                    pattern = r'\{x\}' + re.escape(file_suffix)
+                    formatted_url = re.sub(pattern, filename, formatted_url)
+                    print(f"成功替换{{x}}占位符为: {filename}")
+                else:
+                    print(f"警告: 未能获取匹配{file_suffix}的文件")
+            else:
+                print(f"警告: 无法处理{{x}}占位符，URL不是GitHub raw链接或找不到文件后缀")
+        
+        print(f"实际请求URL: {formatted_url}")
+        
+        # 模拟Chrome浏览器请求头，与curl命令类似
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'zh-CN,zh;q=0.9',
+            'Cache-Control': 'no-cache',
+            'DNT': '1',
+            'Pragma': 'no-cache',
+            'Upgrade-Insecure-Requests': '1',
+            'sec-ch-ua': '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'none',
+            'sec-fetch-user': '?1'
+        }
+        
+        # 特殊站点处理 - 对特定的站点使用不同的请求方式
+        special_sites = ['igdux.top']
+        use_session = any(site in formatted_url for site in special_sites)
+        
+        if use_session:
+            # 使用Session对象来保持cookie等状态
+            session = requests.Session()
+            # 先发送一个HEAD请求，获取cookie等信息
+            session.head(formatted_url, headers=headers, timeout=30)
+            response = session.get(formatted_url, headers=headers, timeout=60, stream=True)
+        else:
+            # 普通请求
+            response = requests.get(formatted_url, headers=headers, timeout=60, stream=True)
+        
         response.raise_for_status()
         
-        # 检查Content-Type，如果是二进制类型，直接读取内容
-        content_type = response.headers.get('Content-Type', '')
+        # 检查Content-Type，确保正确处理各种类型的内容
+        content_type = response.headers.get('Content-Type', '').lower()
+        # print(f"Content-Type: {content_type}")
+        
+        # 处理不同内容类型
+        # 1. 处理二进制类型
         if 'application/octet-stream' in content_type or 'application/x-yaml' in content_type:
-            content = response.content.decode('utf-8')
+            content = response.content.decode('utf-8', errors='ignore')
+        # 2. 处理明确指定了UTF-8字符集的文本
+        elif 'charset=utf-8' in content_type or 'text/plain' in content_type:
+            # 尝试多种解码方式
+            encodings_to_try = ['utf-8', 'gbk', 'latin1', 'ascii', 'iso-8859-1']
+            for encoding in encodings_to_try:
+                try:
+                    content = response.content.decode(encoding, errors='ignore')
+                    # 检查解码是否成功 - 如果包含常见订阅指示符
+                    if any(indicator in content for indicator in ['proxies:', 'vmess://', 'trojan://', 'ss://', 'vless://']):
+                        # print(f"使用 {encoding} 编码成功解码内容")
+                        break
+                except UnicodeDecodeError:
+                    continue
+            else:
+                # 如果所有编码都失败，使用默认UTF-8
+                content = response.content.decode('utf-8', errors='ignore')
+                
+            # 如果网址是特殊站点但仍然得到乱码，尝试拆解HTML标记
+            if use_session and not any(indicator in content for indicator in ['proxies:', 'vmess://', 'trojan://', 'ss://', 'vless://']):
+                try:
+                    # 尝试解析HTML并提取内容
+                    from bs4 import BeautifulSoup
+                    soup = BeautifulSoup(response.content, 'html.parser')
+                    # 查找所有可能包含订阅信息的元素
+                    for element in soup.find_all(['pre', 'code', 'div', 'textarea']):
+                        element_text = element.get_text()
+                        if any(indicator in element_text for indicator in ['proxies:', 'vmess://', 'trojan://', 'ss://', 'vless://']):
+                            print(f"从HTML元素中提取到订阅内容")
+                            content = element_text
+                            break
+                except ImportError:
+                    print("未安装BeautifulSoup，跳过HTML解析")
+                except Exception as e:
+                    print(f"HTML解析错误: {str(e)}")
+        # 3. 处理可能是base64编码的内容
+        elif 'text/base64' in content_type:
+            content = response.content.decode('utf-8', errors='ignore')
+        # 4. 处理其他文本格式，如json
+        elif 'application/json' in content_type or 'text/' in content_type:
+            content = response.content.decode('utf-8', errors='ignore')
+        # 5. 默认情况
         else:
             content = response.text
+        
+        # 测试内容是否可能是Base64编码
+        if not any(indicator in content for indicator in ['proxies:', 'vmess://', 'trojan://', 'ss://', 'vless://']):
+            try:
+                # 移除空白字符，尝试base64解码
+                cleaned_content = re.sub(r'\s+', '', content)
+                # 添加适当的填充
+                padding = len(cleaned_content) % 4
+                if padding:
+                    cleaned_content += '=' * (4 - padding)
+                # 尝试base64解码
+                decoded = base64.b64decode(cleaned_content)
+                decoded_text = decoded.decode('utf-8', errors='ignore')
+                
+                if any(indicator in decoded_text for indicator in ['proxies:', 'vmess://', 'trojan://', 'ss://', 'vless://']):
+                    print("检测到Base64编码的订阅内容，已成功解码")
+                    content = decoded_text
+            except:
+                # 解码失败，继续使用原始内容
+                pass
             
         return content
+    except KeyError as e:
+        print(f"URL中包含未支持的占位符: {e}")
+        return None
     except Exception as e:
         print(f"Error fetching {url}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return None
 
 def parse_clash_yaml(content):
     """解析Clash配置文件"""
     try:
         data = yaml.safe_load(content)
-        if not data or 'proxies' not in data:
+        if not data:
             return []
-        return data['proxies']
+        
+        # 直接查找proxies字段，无论它在哪个层级
+        if 'proxies' in data:
+            if DEBUG_MODE:
+                print(f"从YAML中找到 {len(data['proxies'])} 个节点")
+            return data['proxies']
+            
+        # 如果没有找到proxies字段，尝试其他可能的字段名
+        for key in ['proxy-providers', 'Proxy', 'proxys']:
+            if key in data and isinstance(data[key], list):
+                if DEBUG_MODE:
+                    print(f"从YAML的{key}字段中找到 {len(data[key])} 个节点")
+                return data[key]
+                
+        print("YAML中未找到节点信息")
+        return []
     except Exception as e:
-        print(f"Error parsing Clash YAML: {str(e)}")
+        print(f"解析Clash YAML失败: {str(e)}")
         return []
 
 def parse_v2ray_base64(content):
@@ -193,7 +503,7 @@ def parse_v2ray_base64(content):
                     nodes.append(node)
         return nodes
     except Exception as e:
-        print(f"Error parsing V2Ray base64: {str(e)}")
+        # print(f"Error parsing V2Ray base64: {str(e)}")
         return []
 
 def parse_v2ray_uri(uri):
@@ -214,9 +524,9 @@ def parse_v2ray_uri(uri):
                     'uuid': config.get('id', ''),
                     'alterId': int(config.get('aid', 0)),
                     'cipher': config.get('type', 'auto'),
-                    'tls': config.get('tls', '') == 'tls',
-                    'network': config.get('net', 'tcp')
-                }
+                        'tls': config.get('tls', '') == 'tls',
+                        'network': config.get('net', 'tcp')
+                    }
             except json.JSONDecodeError:
                 # 某些情况下vmess可能使用非标准格式
                 print(f"Non-standard vmess format: {uri}")
@@ -319,9 +629,9 @@ def parse_v2ray_uri(uri):
                             'password': password
                         }
                 except Exception as e:
-                    print(f"Invalid ss URI format: {uri}, error: {str(e)}")
+                    # print(f"Invalid ss URI format: {uri}, error: {str(e)}")
                     return None
-                
+
         # 处理shadowsocksr协议
         elif uri.startswith('ssr://'):
             b64_config = uri.replace('ssr://', '')
@@ -364,7 +674,7 @@ def parse_v2ray_uri(uri):
                         'password': password
                     }
             except Exception as e:
-                print(f"Error parsing SSR URI: {str(e)}")
+                # print(f"Error parsing SSR URI: {str(e)}")
                 return None
                 
         # 处理HTTP/HTTPS协议
@@ -421,11 +731,11 @@ def parse_v2ray_uri(uri):
             }
 
     except Exception as e:
-        print(f"Error parsing URI: {str(e)}")
+        # print(f"Error parsing URI: {str(e)}")
         return None
 
 def extract_nodes(content):
-    """级联提取节点，按照Base64 -> YAML -> 正则表达式的顺序尝试"""
+    """级联提取节点，按照Base64 -> YAML -> 正则表达式 -> JSON的顺序尝试"""
     if not content:
         return []
     
@@ -459,12 +769,13 @@ def extract_nodes(content):
                         if node:
                             nodes.append(node)
         except Exception as e:
-            print(f"Base64解码失败或未找到节点")
+            # print(f"Base64解码失败或未找到节点: {str(e)}")
+            pass
     except Exception as e:
         print(f"Base64预处理失败: {str(e)}")
     
     # 如果已经提取到节点，直接返回
-    if nodes:
+    if len(nodes) > 0:
         print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
         return nodes
     
@@ -473,24 +784,49 @@ def extract_nodes(content):
         # 移除HTML标签和特殊标记
         cleaned_content = re.sub(r'<[^>]+>|!&lt;str&gt;', '', content)
         
-        # 判断是否是YAML格式
-        if cleaned_content.strip().startswith('proxies:') or any(cleaned_content.strip().startswith(prefix) for prefix in ['port:', 'socks-port:', 'mixed-port:']):
-            print("尝试解析YAML格式内容")
+        # 更强大的YAML格式检测，查找常见Clash配置特征
+        yaml_indicators = [
+            'proxies:', 'Proxy:', 'proxy:', 'proxy-providers:', 
+            'port:', 'socks-port:', 'allow-lan:', 'mode:',
+            'type: vmess', 'type: ss', 'type: trojan', 'type: vless'
+        ]
+        
+        if any(indicator in cleaned_content for indicator in yaml_indicators):
+            # print("尝试解析YAML格式内容")
             methods_tried.append("YAML")
-            yaml_nodes = parse_clash_yaml(cleaned_content)
-            if yaml_nodes:
-                nodes.extend(yaml_nodes)
+            
+            # 尝试直接加载YAML
+            try:
+                yaml_nodes = parse_clash_yaml(cleaned_content)
+                if yaml_nodes:
+                    # print(f"从YAML中提取到{len(yaml_nodes)}个节点")
+                    nodes.extend(yaml_nodes)
+            except Exception as yaml_error:
+                print(f"标准YAML解析失败: {str(yaml_error)}")
+                
+                # 如果标准解析失败，尝试更宽松的解析方式
+                try:
+                    # 尝试提取proxies部分
+                    proxies_match = re.search(r'proxies:\s*\n([\s\S]+?)(?:\n\w+:|$)', cleaned_content)
+                    if proxies_match:
+                        proxies_yaml = "proxies:\n" + proxies_match.group(1)
+                        yaml_nodes = parse_clash_yaml(proxies_yaml)
+                        if yaml_nodes:
+                            print(f"从proxies块提取到{len(yaml_nodes)}个节点")
+                            nodes.extend(yaml_nodes)
+                except Exception as fallback_error:
+                    print(f"尝试解析proxies块失败: {str(fallback_error)}")
     except Exception as e:
-        print(f"YAML解析失败: {str(e)}")
+        print(f"YAML解析过程出错: {str(e)}")
     
     # 如果已经提取到节点，直接返回
-    if nodes:
+    if len(nodes) > 0:
         print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
         return nodes
     
     # 3. 尝试使用正则表达式直接提取
     try:
-        print("尝试使用正则表达式直接提取节点")
+        # print("尝试使用正则表达式直接提取节点")
         methods_tried.append("正则表达式")
         
         # 为每种支持的协议定义正则表达式并提取
@@ -512,8 +848,181 @@ def extract_nodes(content):
     except Exception as e:
         print(f"正则表达式提取失败: {str(e)}")
     
-    print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
+    # 如果已经提取到节点，直接返回
+    if len(nodes) > 0:
+        print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
+        return nodes
+    
+    # 4. 尝试解析JSON格式
+    try:
+        # print("尝试解析JSON格式")
+        methods_tried.append("JSON")
+        
+        # 清理内容，移除可能的HTML标签和注释
+        cleaned_content = re.sub(r'<[^>]+>|/\*.*?\*/|//.*?$', '', content, flags=re.MULTILINE)
+        
+        # 尝试解析JSON
+        try:
+            json_data = json.loads(cleaned_content)
+            json_nodes = parse_json_nodes(json_data)
+            if json_nodes:
+                # print(f"从JSON中提取到{len(json_nodes)}个节点")
+                nodes.extend(json_nodes)
+        except json.JSONDecodeError as e:
+            # 尝试查找内容中的JSON片段
+            try:
+                # 查找类似于 [{...}] 或 {...} 形式的JSON
+                json_matches = re.findall(r'(\[{.*?}\]|\{.*?\})', cleaned_content, re.DOTALL)
+                for json_match in json_matches:
+                    try:
+                        potential_json = json.loads(json_match)
+                        json_nodes = parse_json_nodes(potential_json)
+                        if json_nodes:
+                            # print(f"从JSON片段中提取到{len(json_nodes)}个节点")
+                            nodes.extend(json_nodes)
+                            # 找到有效的JSON片段后，不再继续查找
+                            break
+                    except:
+                        continue
+            except Exception as extract_error:
+                # print(f"尝试提取JSON片段失败: {str(extract_error)}")
+                pass
+    except Exception as e:
+        print(f"JSON解析过程出错: {str(e)}")
+    
+    if len(nodes) > 0:
+        print(f"通过JSON方法成功提取到{len(nodes)}个节点")
+        return nodes
+    else:
+        print("未找到任何节点")
+        return []
+
+def parse_json_nodes(json_data):
+    """从JSON数据中解析节点信息"""
+    nodes = []
+    
+    # 处理数组形式的JSON
+    if isinstance(json_data, list):
+        for item in json_data:
+            node = parse_single_json_node(item)
+            if node:
+                nodes.append(node)
+    # 处理对象形式的JSON
+    elif isinstance(json_data, dict):
+        # 检查是否是单个节点
+        node = parse_single_json_node(json_data)
+        if node:
+            nodes.append(node)
+        # 检查是否包含节点列表
+        elif 'servers' in json_data and isinstance(json_data['servers'], list):
+            for server in json_data['servers']:
+                node = parse_single_json_node(server)
+                if node:
+                    nodes.append(node)
+        # 检查其他可能的字段名
+        for key in ['proxies', 'nodes', 'configs']:
+            if key in json_data and isinstance(json_data[key], list):
+                for item in json_data[key]:
+                    node = parse_single_json_node(item)
+                    if node:
+                        nodes.append(node)
+    
     return nodes
+
+def parse_single_json_node(item):
+    """解析单个JSON节点数据"""
+    # 如果不是字典，直接返回
+    if not isinstance(item, dict):
+        return None
+    
+    # 支持Shadowsocks格式
+    if ('server' in item and 'server_port' in item and 
+        'method' in item and 'password' in item):
+        try:
+            return {
+                'type': 'ss',
+                'name': item.get('remarks', f"SS-{item['server']}"),
+                'server': item['server'],
+                'port': int(item['server_port']),
+                'cipher': item['method'],
+                'password': item['password'],
+                'plugin': item.get('plugin', ''),
+                'plugin_opts': item.get('plugin_opts', '')
+            }
+        except Exception as e:
+            print(f"解析Shadowsocks节点失败: {str(e)}")
+            return None
+    
+    # 支持VMess格式
+    elif ('add' in item and 'port' in item and 'id' in item):
+        try:
+            return {
+                'type': 'vmess',
+                'name': item.get('ps', item.get('remarks', f"VMess-{item['add']}")),
+                'server': item['add'],
+                'port': int(item['port']),
+                'uuid': item['id'],
+                'alterId': int(item.get('aid', 0)),
+                'cipher': item.get('scy', item.get('security', 'auto')),
+                'tls': item.get('tls', '') == 'tls',
+                'network': item.get('net', 'tcp'),
+                'path': item.get('path', '/'),
+                'host': item.get('host', '')
+            }
+        except Exception as e:
+            print(f"解析VMess节点失败: {str(e)}")
+            return None
+    
+    # 支持Trojan格式
+    elif ('server' in item and 'port' in item and 'password' in item and 
+          item.get('type', '').lower() == 'trojan'):
+        try:
+            return {
+                'type': 'trojan',
+                'name': item.get('remarks', f"Trojan-{item['server']}"),
+                'server': item['server'],
+                'port': int(item['port']),
+                'password': item['password'],
+                'sni': item.get('sni', item.get('peer', ''))
+            }
+        except Exception as e:
+            print(f"解析Trojan节点失败: {str(e)}")
+            return None
+    
+    # 支持Clash格式
+    elif ('type' in item and 'server' in item and 'port' in item):
+        try:
+            node_type = item['type'].lower()
+            if node_type in ['ss', 'vmess', 'trojan', 'vless', 'http', 'socks']:
+                node = {
+                    'type': node_type,
+                    'name': item.get('name', f"{node_type.upper()}-{item['server']}"),
+                    'server': item['server'],
+                    'port': int(item['port'])
+                }
+                
+                # 根据不同类型添加特定字段
+                if node_type == 'ss':
+                    node['cipher'] = item.get('cipher', 'aes-256-gcm')
+                    node['password'] = item.get('password', '')
+                elif node_type == 'vmess':
+                    node['uuid'] = item.get('uuid', '')
+                    node['alterId'] = int(item.get('alterId', 0))
+                    node['cipher'] = item.get('cipher', 'auto')
+                    node['tls'] = item.get('tls', False)
+                    node['network'] = item.get('network', 'tcp')
+                    if 'ws-path' in item:
+                        node['path'] = item['ws-path']
+                elif node_type in ['trojan', 'vless']:
+                    node['password'] = item.get('password', '')
+                    node['sni'] = item.get('sni', '')
+                    
+                return node
+        except Exception as e:
+            print(f"解析Clash节点失败: {str(e)}")
+            return None
+    
+    return None
 
 def download_xray_core():
     """下载Xray核心程序到当前目录"""
@@ -1051,18 +1560,18 @@ def process_node(node):
     if not node or 'name' not in node or 'server' not in node:
         return None
 
-    print(f"测试节点: {node['name']} [{node['type']}] - {node['server']}:{node['port']}")
+    # print(f"测试节点: {node['name']} [{node['type']}] - {node['server']}:{node['port']}")
     latency = test_latency(node)
     
     # 过滤掉延迟为0ms或连接失败的节点
     if latency <= 0:
-        status = "连接失败" if latency == -1 else "延迟为0ms"
-        print(f"节点: {node['name']} ，{status}，跳过")
+        # status = "连接失败" if latency == -1 else "延迟为0ms"
+        # print(f"节点: {node['name']} ，{status}，跳过")
         return None
     
     # 更新节点名称，添加延迟信息
     node['name'] = f"{node['name']} [{latency}ms]"
-    print(f"节点: {node['name']} ，延迟: {latency}ms")
+    print(f"有效节点: {node['name']} ，延迟: {latency}ms")
     return node
 
 def remove_duplicates(nodes):
@@ -1074,7 +1583,8 @@ def remove_duplicates(nodes):
             if key not in unique_nodes:
                 unique_nodes[key] = node
         except Exception as e:
-            print(f"处理节点 {node['name']} 时出错: {str(e)}")
+            # print(f"处理节点 {node['name']} 时出错: {str(e)}")
+            continue
     return list(unique_nodes.values())
 
 def node_to_v2ray_uri(node):
@@ -1162,13 +1672,17 @@ def main():
             
         # 使用新的级联提取函数
         nodes = extract_nodes(content)
-        print(f"成功提取 {len(nodes)} 个节点")
+        # print(f"成功提取 {len(nodes)} 个节点")
         all_nodes.extend(nodes)
     
     # 节点去重
     print(f"去重前节点数量: {len(all_nodes)}")
     all_nodes = remove_duplicates(all_nodes)
     print(f"去重后节点数量: {len(all_nodes)}")
+    
+
+    # 暂时只测试获取节点信息
+    # return
     
     # 使用线程池并发测试节点延迟
     print(f"\n开始测试节点延迟...")
@@ -1187,10 +1701,10 @@ def main():
     valid_uris = []
     valid_uri_count = 0
     for node in valid_nodes:
-        uri = node_to_v2ray_uri(node)
-        if uri:
-            valid_uris.append(uri)
-            valid_uri_count += 1
+            uri = node_to_v2ray_uri(node)
+            if uri:
+                valid_uris.append(uri)
+                valid_uri_count += 1
     
     # 将所有URI合并为一个字符串，并进行base64编码
     if valid_uri_count > 0:
