@@ -19,62 +19,62 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 订阅链接列表
 links = [
-    "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/main/data/{Y_m_d}/{x}.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc0.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc1.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc2.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc3.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc4.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/xiaoji235/airport-free/refs/heads/main/clash/naidounode.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/main/data/{Y_m_d}/{x}.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Roywaller/clash_subscription/refs/heads/main/clash_subscription.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc0.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc1.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc2.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc3.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Q3dlaXpoaQ/V2rayN_Clash_Node_Getter/refs/heads/main/APIs/sc4.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/xiaoji235/airport-free/refs/heads/main/clash/naidounode.txt",
     "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/LogInfo.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/SSAggregator/master/sub/sub_merge_yaml.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/ljlfct01/ljlfct01.github.io/refs/heads/main/节点",
-    "https://ghproxy.net/https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/leetomlee123/freenode/refs/heads/main/README.md",
-    "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/zhangkaiitugithub/passcro/main/speednodes.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mgit0001/test_clash/refs/heads/main/heima.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mai19950/clashgithub_com/refs/heads/main/site",
-    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/refs/heads/main/README.md",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub",
-    "https://ghproxy.net/https://raw.githubusercontent.com/shahidbhutta/Clash/refs/heads/main/Router",
-    "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.meta.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/anaer/Sub/refs/heads/main/clash.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/a2470982985/getNode/main/clash.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/c.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.yml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mfbpn/tg_mfbpn_sub/main/trial.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/clash.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/all_configs.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/ripaojiedian/freenode/main/clash",
-    "https://ghproxy.net/https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml",
-    "https://ghproxy.net/https://raw.githubusercontent.com/mfuu/v2ray/master/clash.yaml",
-    "https://api.mxlweb.xyz/sub?target=clash&url=https://www.xrayvip.com/free.yaml&insert=false",
-    "https://api.mxlweb.xyz/sub?target=clash&url=https://mxlsub.me/free&insert=false",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/1-{Ymd}.yaml",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/2-{Ymd}.yaml",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/3-{Ymd}.yaml",
-    "https://www.freeclashnode.com/uploads/{Y}/{m}/4-{Ymd}.yaml",
-    "https://sub.reajason.eu.org/clash.yaml",
-    "https://proxypool.link/trojan/sub",
-    "https://proxypool.link/ss/sub",
-    "https://proxypool.link/vmess/sub",
-    "https://mxlsub.me/newfull",
-    "https://igdux.top/5Hna",
-    "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
-    "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
-    "https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify2.txt",
-    "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify3.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/SSAggregator/master/sub/sub_merge_yaml.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/ljlfct01/ljlfct01.github.io/refs/heads/main/节点",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/leetomlee123/freenode/refs/heads/main/README.md",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/zhangkaiitugithub/passcro/main/speednodes.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mgit0001/test_clash/refs/heads/main/heima.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mai19950/clashgithub_com/refs/heads/main/site",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/clashfree/refs/heads/main/clash.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/refs/heads/main/README.md",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/shahidbhutta/Clash/refs/heads/main/Router",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.meta.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/anaer/Sub/refs/heads/main/clash.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/a2470982985/getNode/main/clash.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/free18/v2ray/refs/heads/main/c.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list.yml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mfbpn/tg_mfbpn_sub/main/trial.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Ruk1ng001/freeSub/main/clash.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/all_configs.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/ripaojiedian/freenode/main/clash",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/mfuu/v2ray/master/clash.yaml",
+    # "https://api.mxlweb.xyz/sub?target=clash&url=https://www.xrayvip.com/free.yaml&insert=false",
+    # "https://api.mxlweb.xyz/sub?target=clash&url=https://mxlsub.me/free&insert=false",
+    # "https://www.freeclashnode.com/uploads/{Y}/{m}/0-{Ymd}.yaml",
+    # "https://www.freeclashnode.com/uploads/{Y}/{m}/1-{Ymd}.yaml",
+    # "https://www.freeclashnode.com/uploads/{Y}/{m}/2-{Ymd}.yaml",
+    # "https://www.freeclashnode.com/uploads/{Y}/{m}/3-{Ymd}.yaml",
+    # "https://www.freeclashnode.com/uploads/{Y}/{m}/4-{Ymd}.yaml",
+    # "https://sub.reajason.eu.org/clash.yaml",
+    # "https://proxypool.link/trojan/sub",
+    # "https://proxypool.link/ss/sub",
+    # "https://proxypool.link/vmess/sub",
+    # "https://mxlsub.me/newfull",
+    # "https://igdux.top/5Hna",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify2.txt",
+    # "https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify3.txt",
 ]
 
 # links = [
@@ -470,7 +470,7 @@ def parse_clash_yaml(content):
         print("YAML中未找到节点信息")
         return []
     except Exception as e:
-        print(f"解析Clash YAML失败: {str(e)}")
+        # print(f"解析Clash YAML失败: {str(e)}")
         return []
 
 def parse_v2ray_base64(content):
@@ -776,7 +776,7 @@ def extract_nodes(content):
     
     # 如果已经提取到节点，直接返回
     if len(nodes) > 0:
-        print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
+        print(f"通过【{methods_tried[-1]}】方法成功提取到{len(nodes)}个节点")
         return nodes
     
     # 2. 尝试解析YAML格式
@@ -821,7 +821,7 @@ def extract_nodes(content):
     
     # 如果已经提取到节点，直接返回
     if len(nodes) > 0:
-        print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
+        print(f"通过【{methods_tried[-1]}】方法成功提取到{len(nodes)}个节点")
         return nodes
     
     # 3. 尝试使用正则表达式直接提取
@@ -850,7 +850,7 @@ def extract_nodes(content):
     
     # 如果已经提取到节点，直接返回
     if len(nodes) > 0:
-        print(f"通过{', '.join(methods_tried)}方法成功提取到{len(nodes)}个节点")
+        print(f"通过【{methods_tried[-1]}】方法成功提取到{len(nodes)}个节点")
         return nodes
     
     # 4. 尝试解析JSON格式
@@ -891,7 +891,7 @@ def extract_nodes(content):
         print(f"JSON解析过程出错: {str(e)}")
     
     if len(nodes) > 0:
-        print(f"通过JSON方法成功提取到{len(nodes)}个节点")
+        print(f"通过【{methods_tried[-1]}】方法成功提取到{len(nodes)}个节点")
         return nodes
     else:
         print("未找到任何节点")
@@ -1682,7 +1682,7 @@ def main():
     
 
     # 暂时只测试获取节点信息
-    # return
+    return
     
     # 使用线程池并发测试节点延迟
     print(f"\n开始测试节点延迟...")
