@@ -57,17 +57,18 @@ python main.py
   - 节点测试：`test_node_latency`、`test_latency`
   - 节点处理：`process_node`、`remove_duplicates`
   - 核心程序管理：`find_core_program`、`download_xray_core`
+- `config/settings.py`:  加载yaml配置文件，以及初始化相关配置
 
 ## 订阅链接配置
 
-编辑脚本中的`links`列表可以自定义订阅链接：
+编辑config.yaml配置文件可以自定义订阅链接：
 
-```python
-links = [
-    "https://example.com/subscription1",
-    "https://example.com/subscription2",
-    # 添加更多链接...
-]
+```yaml
+#单个订阅链接
+subscriptions:
+  - https://example.com/subscription1
+  - https://example.com/subscription2
+  - ....
 ```
 
 支持多种链接格式，包含日期变量和GitHub仓库链接。
