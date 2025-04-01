@@ -1392,7 +1392,7 @@ def generate_v2ray_config(node, local_port):
                         "address": node['server'],
                         "port": node['port'],
                         "method": node['cipher'],
-                        "password": node['password']
+                        "password": node.get('password', 'None')
                     }
                 ]
             }
