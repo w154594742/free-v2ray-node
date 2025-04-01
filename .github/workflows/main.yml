@@ -2,39 +2,95 @@ name: free-v2ray-node
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'  # 每6小时运行一次（UTC时间）
+  workflow_dispatch:
   push:
     paths-ignore:
-      - '**'
-  workflow_dispatch:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'picture'
 
 jobs:
-  run_demo_actions:
+  update-nodes:
+    name: Update Proxy Nodes
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      actions: read
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # 转到 Settings > Secrets and variables > Actions
-          # 点击 New repository secret，添加 Secret，名称为 BOT，输入你的token
-          token: ${{ secrets.BOT }}
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.12.9'
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
-      - name: Install requirements.txt
+      - name: Install dependencies
         run: |
-          pip install -r ./requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Run main.py
+      - name: Run node collector
         run: python main.py
+        timeout-minutes: 60
+        env:
+          MAX_CONCURRENT_TESTS: 50  # 自定义并发数
 
-      - name: Commit and push file
+      - name: Validate output
+        id: validation
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # 检查文件存在性、大小和基本格式
+          if [ ! -f "v2ray.txt" ]; then
+            echo "::error::Output file not found"
+            exit 1
+          fi
+          
+          filesize=$(wc -c <"v2ray.txt")
+          if [ "$filesize" -lt 100 ]; then
+            echo "::error::File size too small (${filesize} bytes)"
+            exit 2
+          fi
+
+      - name: Commit changes
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"s
+          
+          # 生成智能提交信息
+          timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          commit_hash=$(git rev-parse --short HEAD)
+          commit_msg="🌐 Update nodes - ${timestamp} (${commit_hash})"
+          
+          # 添加所有变更文件
           git add v2ray.txt
-          git commit -m "update" || echo "No changes to commit"
-          git push https://${{ secrets.BOT }}:x-oauth-basic@github.com/${GITHUB_REPOSITORY}.git
+          
+          # 仅在存在变更时提交
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "$commit_msg"
+            git pull --rebase  # 防止冲突
+            branch_name=${GITHUB_REF#refs/heads/}
+            git push origin HEAD:$branch_name
+            echo "::notice::Changes pushed successfully"
+          else
+            echo "::notice::No changes to commit"
+          fi
+
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          # 清理临时文件
+          find . -type f -name '*.tmp' -delete
+          rm -rf ./temp
