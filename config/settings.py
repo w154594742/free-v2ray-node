@@ -1,10 +1,7 @@
 import os
-import yaml
 from pathlib import Path
-from dotenv import load_dotenv
 from typing import Dict, Any
-
-load_dotenv()
+import yaml
 
 
 class Settings:
@@ -14,7 +11,7 @@ class Settings:
     USER_AGENT = os.getenv("USER_AGENT", "Mozilla/5.0")
 
     # 项目根目录路径配置
-    BASE_DIR = Path(__file__).parent
+    BASE_DIR = Path(__file__).parent.parent
     # xray-core存放的文件夹
     XRAY_CORE_DIR = BASE_DIR / "xray-core"
     OUTPUT_DIR = BASE_DIR
@@ -29,7 +26,7 @@ class Settings:
         if not cls.CONFIG_FILE.exists():
             raise FileNotFoundError(f"配置文件 {cls.CONFIG_FILE} 不存在")
 
-        with open(cls.CONFIG_FILE) as f:
+        with open(cls.CONFIG_FILE, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
 
     @classmethod

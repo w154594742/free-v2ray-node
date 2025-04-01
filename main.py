@@ -16,8 +16,9 @@ import io
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs, unquote
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from config.settings import Settings
 
-# 订阅链接列表
+"""# 订阅链接列表
 links = [
     "https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/main/data/{Y_m_d}/{x}.yaml",
     "https://ghproxy.net/https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml",
@@ -88,7 +89,7 @@ links = [
 #     'https://ghproxy.net/https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_BASE64.txt',
 #     'https://ghproxy.net/https://raw.githubusercontent.com/vpnmarket/sub/refs/heads/main/hiddify1.txt',
 #    ]
-
+"""
 # 支持的协议类型列表
 SUPPORTED_PROTOCOLS = [
     'vmess://',
@@ -1682,7 +1683,12 @@ def node_to_v2ray_uri(node):
 
 def main():
     global CORE_PATH
-
+    Settings.setup()
+    config = Settings.load_config()
+    # 配置文件中的订阅链接
+    config_links = config["subscriptions"]
+    # Python 3.7后的list去重
+    dedup_links = list(dict.fromkeys(config_links))
     # 查找核心程序
     CORE_PATH = find_core_program()
 
@@ -1690,7 +1696,7 @@ def main():
 
     # 获取并解析所有订阅
     print("\n开始获取节点信息...")
-    for link in links:
+    for link in dedup_links:
         print(f"\n正在处理订阅链接: {link}")
         content = fetch_content(link)
         if not content:
