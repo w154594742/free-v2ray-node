@@ -75,7 +75,7 @@ jobs:
           commit_msg="🌐 Update nodes - ${timestamp} (${commit_hash})"
           
           # 添加所有变更文件
-          git add v2ray.txt
+          git add v2ray.txt config.yaml
           
           # 仅在存在变更时提交
           if ! git diff-index --quiet HEAD; then
