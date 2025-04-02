@@ -1687,7 +1687,7 @@ def main():
     Settings.setup()
     config = Settings.load_config()
     # 获取汇聚订阅的数据
-    agg_subs_content = HttpRequestTool().set_base_url(config["aggSubs"]).get("").text
+    agg_subs_content = HttpRequestTool().set_base_url(config["aggSubs"]).get("")
     # 拆分汇聚订阅的内容
     agg_subs = []
     if not agg_subs_content:
