@@ -1687,7 +1687,7 @@ def main():
     Settings.setup()
     config = Settings.load_config()
     # 获取汇聚订阅的数据
-    agg_subs_content = HttpRequestTool().set_base_url(config["aggSubs"]).get("").text
+    agg_subs_content = HttpRequestTool().set_base_url(config["aggSubs"]).get("")
     # 拆分汇聚订阅的内容
     agg_subs = []
     if not agg_subs_content:
@@ -1705,18 +1705,26 @@ def main():
 
     # 获取并解析所有订阅
     print("\n开始获取节点信息...")
-    for link in dedup_links:
-        print(f"\n正在处理订阅链接: {link}")
-        content = fetch_content(link)
-        if not content:
-            print("获取失败，跳过该链接")
+    # 倒序遍历dedup_links
+    dedup_links_nums = len(dedup_links)
+    print(f"处理的订阅链接总数为：{dedup_links_nums}")
+    for i in range(dedup_links_nums - 1, -1, -1):
+        print(f"\n正在处理订阅链接: {dedup_links[i]}")
+        content = fetch_content(dedup_links[i])
+        if not content:  # 说明是无效链接
+            print(f"获取失败，跳过该链接  {dedup_links[i]}")
+            # 删除无效链接
+            del dedup_links[i]
             continue
 
         # 使用新的级联提取函数
         nodes = extract_nodes(content)
         # print(f"成功提取 {len(nodes)} 个节点")
         all_nodes.extend(nodes)
-
+    print(f"处理完毕后的订阅链接总数为：{len(dedup_links)}")
+    # 过滤完链接后将最新的订阅链接回写进配置文件
+    config["subscriptions"] = dedup_links
+    Settings.save_config(config)
     # 节点去重
     print(f"去重前节点数量: {len(all_nodes)}")
     all_nodes = remove_duplicates(all_nodes)
