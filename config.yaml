@@ -1,5 +1,5 @@
 # 聚合订阅链接-返回的都是订阅链接不是节点
-subUrls: https://ghproxy.net/https://raw.githubusercontent.com/cmliu/cmliu/main/SubsCheck-URLs
+aggSubs: https://raw.githubusercontent.com/cmliu/cmliu/main/SubsCheck-URLs
 #单个订阅链接
 subscriptions:
   - https://ghproxy.net/https://raw.githubusercontent.com/xiaoer8867785/jddy5/main/data/{Y_m_d}/{x}.yaml

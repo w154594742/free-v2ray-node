@@ -17,6 +17,7 @@ from datetime import datetime
 from urllib.parse import urlparse, parse_qs, unquote
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from config.settings import Settings
+from utils.network_utils import HttpRequestTool
 
 """# 订阅链接列表
 links = [
@@ -1685,10 +1686,18 @@ def main():
     global CORE_PATH
     Settings.setup()
     config = Settings.load_config()
+    # 获取汇聚订阅的数据
+    agg_subs_content = HttpRequestTool().set_base_url(config["aggSubs"]).get("").text
+    # 拆分汇聚订阅的内容
+    agg_subs = []
+    if not agg_subs_content:
+        agg_subs = agg_subs_content.text.split("\n")
     # 配置文件中的订阅链接
     config_links = config["subscriptions"]
+    # 合并汇聚订阅和普通订阅的地址
+    agg_subs.extend(config_links)
     # Python 3.7后的list去重
-    dedup_links = list(dict.fromkeys(config_links))
+    dedup_links = list(dict.fromkeys(agg_subs))
     # 查找核心程序
     CORE_PATH = find_core_program()
 
