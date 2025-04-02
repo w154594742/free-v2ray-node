@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
 from typing import Dict, Any
-
-from utils.yaml_util import YamlHandler
+import yaml
 
 
 class Settings:
@@ -26,14 +25,9 @@ class Settings:
         """加载YAML配置文件"""
         if not cls.CONFIG_FILE.exists():
             raise FileNotFoundError(f"配置文件 {cls.CONFIG_FILE} 不存在")
-        return YamlHandler.safe_read_yaml(cls.CONFIG_FILE)
 
-    @classmethod
-    def save_config(cls, data: Any):
-        """加载YAML配置文件"""
-        if not cls.CONFIG_FILE.exists():
-            raise FileNotFoundError(f"配置文件 {cls.CONFIG_FILE} 不存在")
-        YamlHandler.write_yaml(data, cls.CONFIG_FILE)
+        with open(cls.CONFIG_FILE, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
 
     @classmethod
     def setup(cls):

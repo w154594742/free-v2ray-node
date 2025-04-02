@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 import requests
-from requests import Response
 
 
 class HttpRequestTool:
@@ -46,8 +43,7 @@ class HttpRequestTool:
         self.headers.update(default_headers)
         return self  # 支持链式调用
 
-    def _send_request(self, method, endpoint="", params=None, data=None, json=None, headers=None,
-                      timeout=None) -> Response | None:
+    def _send_request(self, method, endpoint="", params=None, data=None, json=None, headers=None, timeout=None):
         """
         发送HTTP请求。
         :param method: 请求方法 (GET, POST, PUT, DELETE等)
@@ -112,6 +108,6 @@ if __name__ == "__main__":
     response = HttpRequestTool() \
         .set_base_url("https://raw.githubusercontent.com/cmliu/cmliu/main/SubsCheck-URLs") \
         .get("")
-
+    
     if response:
         print("GET请求结果:", response.text)
