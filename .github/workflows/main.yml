@@ -2,7 +2,7 @@ name: free-v2ray-node
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # 每6小时运行一次（UTC时间）
+    - cron: '0 */3 * * *'  # 每3小时运行一次（UTC时间）
   workflow_dispatch:
   push:
     paths-ignore:
